@@ -10,9 +10,6 @@ var run = function(webscraper) {
 	});
 }
 
-console.log(scraping_objects.google_search.url);
-run(scraping_objects.google_search);
-
 var openPage = function(page, ph, webscraper) {
 	page.open(webscraper.url, function(status) {
 		setTimeout(function() {
@@ -22,6 +19,18 @@ var openPage = function(page, ph, webscraper) {
 			} else {
 				ph.exit();
 			}
-		}, 5000);
+		}, 60000);
 	});
 };
+
+var run_command = process.argv[2];
+
+var webscraper = rendering_objects[run_command] || scraping_objects[run_command];
+
+if(webscraper)
+	run(webscraper);
+else {
+	console.log('\n\nNo such command, please input any of the following:\n');
+	console.log('\t-google_search\n\t-adblock_plus\n\t-webstore_extensions\n\t-webstore_adblock\n\t-webstore_extensions_adblock\n\n');
+}
+
