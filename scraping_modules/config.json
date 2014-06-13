@@ -1,0 +1,25 @@
+{
+	"adblock_plus" : {
+		"url" : "https://addons.mozilla.org/en-US/firefox/addon/adblock-plus/statistics/?last=30",
+		"render_name" : "screencaps/adblock_plus_statistics/adblock_plus_statistics"
+	},
+
+	"webstore_extensions" : {
+		"url" : "https://chrome.google.com/webstore/category/extensions?_sort=1",
+		"render_name" : "screencaps/webstore/extensions/webstore_results_extensions"
+	},
+
+	"webstore_adblock" : {
+		"url" : "https://chrome.google.com/webstore/search/adblock",
+		"render_name" : "screencaps/webstore/adblock/webstore_adblock"
+	},
+
+	"webstore_extensions_adblock" : {
+		"url" : "https://chrome.google.com/webstore/search-extensions/adblock",
+		"render_name" : "screencaps/webstore/extensions/webstore_extensions_adblock"
+	},
+
+	"google_search" : {
+		"url" : "https://www.google.com/search?q=adblock"
+	}
+}
