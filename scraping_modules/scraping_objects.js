@@ -1,14 +1,18 @@
 var fs = require('fs');
-var config = JSON.parse(fs.readFileSync('./scraping_modules/config.json'));
+var config = JSON.parse(fs.readFileSync('./config.json'));
 var cheerio = require('cheerio');
+var csv_downloader = require('../utility/utility').csv_downloader;
+var google_search_scraper = require('../utility/utility').google_search_scraper;
 
-function ScrapingObject(url, scrapingCallback) {
+function ScrapingObject(url, scrapingCallback, path_name) {
 	this.url = url;
 	this.scrapingCallback = scrapingCallback;
+	this.path_name = path_name;
 }
 
 ScrapingObject.prototype.process = function(page) {
 	var that = this;
+
 	page.evaluate(
 		function() {
 			return document.body.innerHTML; // returns body html
@@ -20,23 +24,17 @@ ScrapingObject.prototype.process = function(page) {
 	);
 }
 
-var google_search = new ScrapingObject(config.google_search.url, function($) {
-	var results_list = $('div#ires ol').find('li.g');
-	var results_length = results_list.length;
-	for(var i = 0; i < results_length; i++) {
-		var li = $(results_list[i]);
-		var header = li.find('h3.r');
-		var result_name = header.text();
-		var url_raw = li.find('h3.r a').attr('href');
-		var url = url_raw.substring(7);
-		url = url.split('&sa=')[0];
-		console.log(result_name);
-		console.log('-');
-		console.log(url);
-		console.log('\n');
-	}
-});
+var google_search = new ScrapingObject(config.google_search.url, google_search_scraper);
+
+var adblock_plus_csv = new ScrapingObject(config.adblock_plus_csv.url, csv_downloader, config.adblock_plus_csv.path_name);
+
+var os_csv = new ScrapingObject(config.os_csv.url, csv_downloader, config.os_csv.path_name);
+
+var google_search_pagetwo = new ScrapingObject(config.google_search_pagetwo.url, google_search_scraper);
 
 module.exports = {
 	google_search : google_search,
+	google_search_pagetwo : google_search_pagetwo,
+	adblock_plus_csv : adblock_plus_csv,
+	os_csv : os_csv
 }

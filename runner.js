@@ -14,12 +14,8 @@ var openPage = function(page, ph, webscraper) {
 	page.open(webscraper.url, function(status) {
 		setTimeout(function() {
 			webscraper.process(page);
-			if(webscraper.callbackObject) {
-				openPage(page, ph, webscraper.callbackObject);
-			} else {
-				ph.exit();
-			}
-		}, 60000);
+			ph.exit();
+		}, 10000);
 	});
 };
 
@@ -31,6 +27,7 @@ if(webscraper)
 	run(webscraper);
 else {
 	console.log('\n\nNo such command, please input any of the following:\n');
-	console.log('\t-google_search\n\t-adblock_plus\n\t-webstore_extensions\n\t-webstore_adblock\n\t-webstore_extensions_adblock\n\n');
+	console.log('\t-google_search\n\t-google_search_pagetwo\n\t-adblock_plus_csv\n\t-os_csv' +
+		'\n\t-adblock_plus\n\t-webstore_extensions\n\t-webstore_adblock\n\t-webstore_extensions_adblock\n\n');
 }
 

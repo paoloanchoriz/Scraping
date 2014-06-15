@@ -1,14 +1,15 @@
 var dateformat = require('dateformat');
 var fs = require('fs');
-var config = JSON.parse(fs.readFileSync('./scraping_modules/config.json'));
+var config = JSON.parse(fs.readFileSync('./config.json'));
 
-function RenderingObject(url, render_name) {
+function RenderingObject(url, render_name, callback) {
 	this.url = url;
 	this.render_name = render_name;
 }
 
 RenderingObject.prototype.process = function(page) {
-	var file_path = this.render_name + dateformat(new Date(), 'yyyy-mm-dd') + '.png';
+	var today_date = dateformat(new Date(), 'yyyy-mm-dd');
+	var file_path = this.render_name + today_date + '.png';
 	page.render(file_path);
 	console.log('done saving ' + file_path);
 }

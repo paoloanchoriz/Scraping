@@ -21,5 +21,19 @@
 
 	"google_search" : {
 		"url" : "https://www.google.com/search?q=adblock"
+	},
+
+	"google_search_pagetwo" : {
+		"url" : "https://www.google.com/search?q=adblock&start=10"
+	},
+
+	"adblock_plus_csv" : {
+		"url" : "https://addons.mozilla.org/en-US/firefox/addon/adblock-plus/statistics/downloads/sources/?last=30",
+		"path_name" : "csv_folder/adblock_plus"
+	},
+
+	"os_csv" : {
+		"url" : "https://addons.mozilla.org/en-US/firefox/addon/adblock-plus/statistics/usage/os/?last=30",
+		"path_name" : "csv_folder/os"
 	}
 }
