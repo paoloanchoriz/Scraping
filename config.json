@@ -16,7 +16,7 @@
 
 	"webstore_extensions_adblock" : {
 		"url" : "https://chrome.google.com/webstore/search-extensions/adblock",
-		"render_name" : "screencaps/webstore/extensions/webstore_extensions_adblock"
+		"render_name" : "screencaps/webstore/extensions_adblock/webstore_extensions_adblock"
 	},
 
 	"google_search" : {
