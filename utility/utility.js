@@ -1,10 +1,14 @@
 var url = require('url');
 var fs = require('fs');
 var https = require('https');
+var xlsx = require('xlsx');
+var dateformat = require('dateformat');
 
+// Will be used to name sheets for google results
+var sheet_name = 'google_results';
 //function that will download csv using the anchor href from the mozilla website
 //accepts cheerio object for scraping
-var csv_downloader = function($) {
+var csvDownloader = function($) {
 	//get the link href
 	var href = $('a#export_data_csv').attr('href');
 	var raw_url = url.parse(this.url);
@@ -29,9 +33,61 @@ var csv_downloader = function($) {
 	});
 };
 
-var google_search_scraper = function($) {
+var addCell = function(result_pair, row_count, col_count, worksheet) {
+	var cell = { v: result_pair, t: 's' };
+	var cell_ref = xlsx.utils.encode_cell({ c: col_count, r: row_count });
+	worksheet[cell_ref] = cell;
+};
+
+var readWorkBook = function(workbook, content) {
+	workbook.Sheets['google_results'];
+	var sheet = workbook.Sheets[sheet_name];
+	var cell = {};
+	for(var key in sheet) {
+		var col = key[0];
+		if(key[0] === '!') continue;
+		if(col === 'A') { 
+			cell.name = sheet[key].v;
+		} else if(col === 'B') { 
+			cell.url = sheet[key].v;
+			content.push(cell);
+			cell = {};
+		}
+	}
+};
+
+var writeWorkBook = function(workbook, content, file_name) {
+	var worksheet = {};
+	var content_length = content.length;
+	var i;
+	for(i = 0; i < content_length; i++) {
+		var result = content[i];
+		addCell(result.name, i, 0, worksheet);
+		addCell(result.url, i, 1, worksheet);
+	}
+	worksheet['!ref'] = xlsx.utils.encode_range({ s: { c: 0, r: 0 }, e: { c:1, r: i }});
+	workbook.SheetNames.push(sheet_name);
+	workbook.Sheets[sheet_name] = worksheet;
+	xlsx.writeFile(workbook, file_name);
+};
+
+var addToFile = function(results_arr, file_name) {
+	var workbook = { Sheets: {}, SheetNames: []};
+	try{
+		var workbook = xlsx.readFile(file_name);
+	} catch (e) {
+		console.log('Workbook does not exist. Will create later');
+	}
+	var content = [];
+	if(workbook.SheetNames.length) readWorkBook(workbook, content);
+	content = content.concat(results_arr);
+	writeWorkBook(workbook, content, file_name);
+};
+
+var googleSearchScraper = function($) {
 	var results_list = $('div#ires ol').find('li.g');
 	var results_length = results_list.length;
+	var results_arr = [];
 	for(var i = 0; i < results_length; i++) {
 		var li = $(results_list[i]);
 		var header = li.find('h3.r');
@@ -39,12 +95,10 @@ var google_search_scraper = function($) {
 		var url_raw = li.find('h3.r a').attr('href');
 		var url = url_raw.substring(7);
 		url = url.split('&sa=')[0];
-		console.log(result_name);
-		console.log('-');
-		console.log(url);
-		console.log('\n');
+		results_arr.push({ url: url, name: result_name});
 	}
+	addToFile(results_arr, this.path_name + '/results_' + dateformat(new Date(), 'yyyy-mm-dd') + '.xlsx');
 };
 
-module.exports.csv_downloader = csv_downloader;
-module.exports.google_search_scraper = google_search_scraper;
+module.exports.csvDownloader = csvDownloader;
+module.exports.googleSearchScraper = googleSearchScraper;

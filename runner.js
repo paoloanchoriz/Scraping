@@ -15,7 +15,7 @@ var openPage = function(page, ph, webscraper) {
 		setTimeout(function() {
 			webscraper.process(page);
 			ph.exit();
-		}, 60000);
+		}, 10000);
 	});
 };
 

@@ -20,11 +20,13 @@
 	},
 
 	"google_search" : {
-		"url" : "https://www.google.com/search?q=adblock"
+		"url" : "https://www.google.com/search?q=adblock",
+		"path_name" : "google_results"
 	},
 
 	"google_search_pagetwo" : {
-		"url" : "https://www.google.com/search?q=adblock&start=10"
+		"url" : "https://www.google.com/search?q=adblock&start=10",
+		"path_name" : "google_results"
 	},
 
 	"adblock_plus_csv" : {
